@@ -2,6 +2,14 @@
 
 Small library to apply a filters to a image.
 
+This library is wrapper around the following smaller libraries:
+* [image-brightness](https://www.npmjs.com/package/image-brightness)
+* [image-contrast](https://www.npmjs.com/package/image-contrast)
+* [image-filter-grayscale](https://www.npmjs.com/package/image-filter-grayscale)
+* [image-filter-threshold](https://www.npmjs.com/package/image-filter-threshold)
+
+So if you want to use only one or two of these filters you might be better of just including them directly.
+
 ## Install
 
 ```
