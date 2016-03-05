@@ -1,0 +1,19 @@
+{
+  "name": "image-filters",
+  "version": "0.0.1",
+  "description": "* threshold filter * invert filter * sepia filter * tint filter",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify sandbox/sandbox.js > sandbox/bundle.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^13.0.0"
+  },
+  "devDependencies": {
+    "image-brightness": "latest",
+    "image-contrast": "latest",
+    "image-filter-grayscale": "latest"
+  }
+}
