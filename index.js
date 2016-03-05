@@ -1,11 +1,13 @@
 var imageFilterContrast = require('image-contrast');
 var imageFilterBrightness = require('image-brightness');
 var imageFilterGrayscale = require('image-filter-grayscale');
+var imageFilterThreshold = require('image-filter-threshold');
 
 var FILTER_CONFIG = {
     'CONTRAST': imageFilterContrast,
     'BRIGHTNESS': imageFilterBrightness,
-    'GRAYSCALE': imageFilterGrayscale
+    'GRAYSCALE': imageFilterGrayscale,
+    'THRESHOLD': imageFilterThreshold
 };
 
 function getImageElement(selector) {

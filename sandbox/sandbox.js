@@ -59,15 +59,23 @@ function resetElements() {
 
 window.onload = function () {
 
+    var input = document.getElementById("filter-value");
+
     document.getElementById("btn-brightness").addEventListener("click", function () {
         applyFilter('brightness', {
-            adjustment: 30
+            adjustment: input.value || 0
         });
     });
 
     document.getElementById("btn-contrast").addEventListener("click", function () {
         applyFilter('contrast', {
-            adjustment: 30
+            adjustment: input.value || 0
+        });
+    });
+
+    document.getElementById("btn-threshold").addEventListener("click", function () {
+        applyFilter('threshold', {
+            threshold: input.value || 0
         });
     });
 
