@@ -1,0 +1,7 @@
+.original-container {
+    display: flex;
+}
+
+.is-active {
+    background-color: teal;
+}

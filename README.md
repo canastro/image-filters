@@ -1,3 +1,8 @@
+![build status](https://travis-ci.org/canastro/image-filters.svg?branch=master)
+[![npm version](https://badge.fury.io/js/image-filters.svg)](https://badge.fury.io/js/image-filters)
+
+# Work in progress
+
 # image-filters
 
 Small library to apply a filters to a image.
@@ -7,6 +12,10 @@ This library is wrapper around the following smaller libraries:
 * [image-contrast](https://www.npmjs.com/package/image-contrast)
 * [image-filter-grayscale](https://www.npmjs.com/package/image-filter-grayscale)
 * [image-filter-threshold](https://www.npmjs.com/package/image-filter-threshold)
+* [image-filter-sepia](https://www.npmjs.com/package/image-filter-sepia)
+* [image-filter-invert](https://www.npmjs.com/package/image-filter-invert)
+* [image-filter-gamma](https://www.npmjs.com/package/image-filter-gamma)
+* [image-filter-colorize](https://www.npmjs.com/package/image-filter-colorize)
 
 So if you want to use only one or two of these filters you might be better of just including them directly.
 

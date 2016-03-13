@@ -6,34 +6,62 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
     </head>
     <body>
 
         <h1>Original</h1>
-        <img id="original" src="http://lorempixel.com/400/200" />
+        <div class="original-container">
+            <div class="original-image-container">
+                <img id="original" src="dummy.jpg" />
+            </div>
 
-        <button id="btn-brightness">Brightness</button>
-        <button id="btn-contrast">Contrast</button>
-        <button id="btn-grayscale">Grayscale</button>
-        <button id="btn-threshold">Threshold</button>
+            <div class="original-controls-container">
+                <div class="original-row">
+                    <button id="btn-brightness" onClick="toggleEffect('brightness')">Brightness</button>
+                    <input id="input-brightness-value" type="number"/>
+                </div>
 
-        <input id="filter-value" type="number" value="30"/>
+                <div class="original-row">
+                    <button id="btn-contrast" onClick="toggleEffect('contrast')">Contrast</button>
+                    <input id="input-contrast-value" type="number"/>
+                </div>
+
+                <div class="original-row">
+                    <button id="btn-colorize" onClick="toggleEffect('colorize')">Colorize</button>
+                    <input id="input-colorize-color-value" type="string"/>
+                    <input id="input-colorize-level-value" type="number"/>
+                </div>
+
+                <div class="original-row">
+                    <button id="btn-gamma" onClick="toggleEffect('gamma')">Gamma</button>
+                    <input id="input-gamma-value" type="number"/>
+                </div>
+
+                <div class="original-row">
+                    <button id="btn-grayscale" onClick="toggleEffect('grayscale')">Grayscale</button>
+                </div>
+
+                <div class="original-row">
+                    <button id="btn-invert" onClick="toggleEffect('invert')">Invert</button>
+                </div>
+
+                <div class="original-row">
+                    <button id="btn-sepia" onClick="toggleEffect('sepia')">Sepia</button>
+                </div>
+
+                <div class="original-row">
+                    <button id="btn-threshold" onClick="toggleEffect('threshold')">Threshold</button>
+                    <input id="input-threshold-value" type="number"/>
+                </div>
+
+                <button id="btn-apply" onClick="apply()">Apply</button>
+            </div>
+        </div>
 
         <h1>Result</h1>
-        <div class="results-container">
-            <h1>From Image</h1>
-            <div id="target-1" class="target"></div>
-
-            <hr/>
-
-            <h1>From data</h1>
-            <div id="target-2" class="target"></div>
-
-            <hr/>
-
-            <h1>From url</h1>
-            <div id="target-3" class="target"></div>
-        </div>
+        <div id="results-container"></div>
 
         <script src="bundle.js" async defer></script>
     </body>

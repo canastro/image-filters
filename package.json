@@ -1,20 +1,52 @@
 {
   "name": "image-filters",
-  "version": "0.0.2",
-  "description": "* threshold filter * invert filter * sepia filter * tint filter",
-  "main": "index.js",
+  "version": "0.0.3",
+  "description": "Small image filters library",
+  "main": "src/index.js",
   "scripts": {
-    "build": "browserify sandbox/sandbox.js > sandbox/bundle.js"
+     "build": "browserify sandbox/sandbox.js > sandbox/bundle.js -d",
+     "test": "./node_modules/.bin/karma start",
+     "codecov": "cat coverage/*/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js",
+     "serve": "http-server sandbox"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "browserify": "^13.0.0",
-    "image-filter-threshold": "0.0.1"
-  },
+  "keywords": [
+    "image",
+    "filter",
+    "filters",
+    "processing",
+    "manipulation",
+    "transformation",
+    "pixel"
+  ],
   "devDependencies": {
+    "brfs": "^1.4.3",
+    "browserify": "^13.0.0",
+    "browserify-istanbul": "^1.0.0",
+    "chai": "^3.5.0",
+    "codecov.io": "^0.1.6",
+    "http-server": "^0.9.0",
+    "karma": "^0.13.22",
+    "karma-browserify": "^5.0.2",
+    "karma-coverage": "^0.5.5",
+    "karma-mocha": "^0.2.2",
+    "karma-mocha-reporter": "^2.0.0",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "mocha": "^2.4.5",
+    "phantomjs-prebuilt": "^2.1.5",
+    "sinon": "^1.17.3",
+    "watchify": "^3.7.0"
+},
+  "dependencies": {
     "image-brightness": "latest",
     "image-contrast": "latest",
-    "image-filter-grayscale": "latest"
+    "image-filter-grayscale": "latest",
+    "image-filter-threshold": "latest",
+    "image-filter-sepia": "latest",
+    "image-filter-color": "latest",
+    "image-filter-gamma": "latest",
+    "image-filter-invert": "latest",
+    "image-filter-colorize": "latest"
   }
 }
