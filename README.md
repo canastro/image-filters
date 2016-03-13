@@ -28,39 +28,45 @@ npm install image-filters --save
 ## Usage
 At the moment there are two ways of usage, you either provide a image or you provide a canvas imageData.
 
-### From image:
-
-JS file:
+### Initialization:
 ```js
 var imageFilter = require('image-filter');
 
 //from a image element
 //target is not mandatory
 var elementOne = new ImageFilter({
-    from: '#original',
-    to: '#target-1'
+    from: '#original'
 });
 
 //from image data
 //target is not mandatory
 var elementTwo = new ImageFilter({
-    imageData: imageData,
-    to: '#target-2'
+    imageData: imageData
 });
 
 //from url
 //target is not mandatory
 var elementThree = new ImageFilter({
-    url: "http://lorempixel.com/400/200",
-    to: '#target-3'
+    url: "http://lorempixel.com/400/200"
 });
+```
 
-//select filter
-var filter = 'contrast'; //contrast, brightness, grayscale, threshold
+### Apply filters:
 
-//call apply filter with the
-//filter and options necessary to run the selected filter
-var resultOne = elementOne.applyFilter(filter, options);
-var resultTwo = elementTwo.applyFilter(filter, options);
-var resultThree = elementThree.applyFilter(filter, options);
+```js
+imageFilter
+    .contrast({
+        contrast: 50
+    })
+    .brightness({
+        adjustment: 50
+    });
+```
+
+### Get results:
+Every transformation will return as imageData, but you have the possibility to get the result appended to the DOM.
+
+```js
+//append to html
+imageFilter.append('#target');
 ```
