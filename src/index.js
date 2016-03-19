@@ -130,4 +130,14 @@ ImageFilter.prototype.append = function (selector) {
     target.appendChild(image);
 };
 
+ImageFilter.prototype.update = function (selector) {
+
+    var target = document.querySelectorAll(selector)[0];
+    target.setAttribute('src', utils.convertToDataURL(this.canvas, this.context, this.data));
+};
+
+ImageFilter.prototype.getDataURL = function () {
+    return utils.convertToDataURL(this.canvas, this.context, this.data);
+};
+
 module.exports = ImageFilter;
