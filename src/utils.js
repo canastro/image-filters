@@ -1,17 +1,4 @@
 /**
- * @name getCanvas
- * @param {number} w - width
- * @param {number} h - height
- */
-function getCanvas(w, h) {
-    var canvas = document.createElement('canvas');
-    canvas.width = w;
-    canvas.height = h;
-
-    return canvas;
-}
-
-/**
  * @name getPixelsFromImage
  * @param {object} canvas
  * @param {object} context
@@ -37,7 +24,6 @@ function convertToDataURL(canvas, context, imageData) {
 }
 
 module.exports = {
-    getCanvas: getCanvas,
     getPixelsFromImage: getPixelsFromImage,
     convertToDataURL: convertToDataURL
 };
