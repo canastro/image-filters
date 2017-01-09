@@ -18,6 +18,14 @@
         "describe": true,
         "context": true,
         "it": true,
-        "document": true
+        "before": true,
+        "beforeEach": true,
+        "afterEach": true,
+        "window": true,
+        "document": true,
+        "Worker": true,
+        "Blob": true,
+        "importScripts": true,
+        "transform": true
     }
 }

@@ -1,8 +1,7 @@
 var istanbul = require('istanbul');
-var bistanbul = require('browserify-babel-istanbul');
-var babelify = require('babelify');
+var bistanbul = require('browserify-istanbul');
 
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
         singleRun: true,
 
@@ -29,20 +28,20 @@ module.exports = function(config) {
         ],
 
         coverageReporter: {
-            // specify a common output directory
             dir: 'coverage',
             reporters: [
-                // reporters not supporting the `file` property
-                { type: 'html', subdir: 'report-html' },
+                { type: 'lcov', subdir: 'lcov' },
+                { type: 'html', subdir: 'html' },
                 { type: 'text-summary' },
-                { type: 'lcov'}
-            ]
+                { type: 'cobertura', subdir: '.' }
+            ],
+            sourceStore : istanbul.Store.create('fslookup')
         },
 
         browserify: {
             debug: true,
+            plugin: ['proxyquire-universal'],
             transform: [
-                babelify,
                 bistanbul({
                     instrumenterConfig: {
                         noCompact: true
@@ -63,6 +62,6 @@ module.exports = function(config) {
         browsers: ['PhantomJS'],
 
         // see what is going on
-        logLevel: 'LOG_INFO'
+        logLevel: 'LOG_ERROR'
     });
 };

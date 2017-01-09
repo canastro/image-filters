@@ -1,8 +1,8 @@
 /**
- * @name getPixelsFromImage
- * @param {object} canvas
- * @param {object} context
- * @param {object} imageData
+ * @method getPixelsFromImage
+ * @param {Object} canvas
+ * @param {Object} context
+ * @param {Object} imageData
  */
 function getPixelsFromImage(canvas, context, element) {
     if (element.tagName !== 'IMG') {
@@ -14,16 +14,26 @@ function getPixelsFromImage(canvas, context, element) {
 }
 
 /**
- * @name convertToDataURL
- * @param {object} canvas
- * @param {object} context
+ * Get a dom nome by selector
+ * @method  getElement
+ * @param   {String}   selector
+ * @returns {Node}
  */
-function convertToDataURL(canvas, context, imageData) {
-    context.putImageData(imageData, 0, 0);
-    return canvas.toDataURL();
+function getElement(selector) {
+    if (!selector) {
+        throw new Error('image-filters:: no selector provided');
+    }
+
+    const target = document.querySelectorAll(selector)[0];
+
+    if (!target) {
+        throw new Error('image-filters:: no "to" element found');
+    }
+
+    return target;
 }
 
 module.exports = {
-    getPixelsFromImage: getPixelsFromImage,
-    convertToDataURL: convertToDataURL
+    getElement: getElement,
+    getPixelsFromImage: getPixelsFromImage
 };

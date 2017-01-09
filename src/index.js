@@ -1,37 +1,31 @@
-import imageFilterContrast from 'image-filter-contrast';
-import imageFilterBrightness from 'image-brightness';
-import imageFilterGrayscale from 'image-filter-grayscale';
-import imageFilterThreshold from 'image-filter-threshold';
-import imageFilterSepia from 'image-filter-sepia';
-import imageFilterColorize from 'image-filter-colorize';
-import { getCanvas } from 'image-filter-core';
-import utils from './utils';
-
-function getImageElement(selector) {
-    const element = document.querySelectorAll(selector)[0];
-
-    if (!element) {
-        throw new Error('image-filters:: no "from" element found');
-    }
-
-    return element;
-}
+const imageFilterContrast = require('image-filter-contrast');
+const imageFilterBrightness = require('image-filter-brightness');
+const imageFilterGrayscale = require('image-filter-grayscale');
+const imageFilterThreshold = require('image-filter-threshold');
+const imageFilterSepia = require('image-filter-sepia');
+const imageFilterColorize = require('image-filter-colorize');
+const imageFilterCore = require('image-filter-core');
+const utils = require('./utils');
 
 /**
- * @name contrastImage
- * @param {object} options
- * @param {string} options.url - image url
- * @param {string} options.imageData - data of a image extracted from a canvas
- * @param {string} options.from - dom selector of the original image
+ * @method imageFilter
+ * @param {Object} options
+ * @param {String} [options.url] - image url
+ * @param {String} [options.imageData] - data of a image extracted from a canvas
+ * @param {String} [options.from] - dom selector of the original image
+ * @param {Number} nWorkers - number of workers to split the work
  */
-function ImageFilter(options) {
+function ImageFilter(options, nWorkers) {
+    var element;
+    var canvas;
+    var context;
+
     if (!options || (!options.url && !options.imageData && !options.from)) {
         throw new Error('image-filters:: invalid options object');
     }
 
-    let element;
-
     this.filters = [];
+    this.nWorkers = nWorkers;
     this.url = options.url;
     this.from = options.from;
 
@@ -39,21 +33,18 @@ function ImageFilter(options) {
         element = document.createElement('img');
         element.setAttribute('src', options.url);
 
-        this.canvas = getCanvas(element.width, element.height);
-        this.context = this.canvas.getContext('2d');
+        canvas = imageFilterCore.getCanvas(element.width, element.height);
+        context = canvas.getContext('2d');
 
-        this.data = utils.getPixelsFromImage(this.canvas, this.context, element);
-    } else if (options.imageData) {
-        this.canvas = getCanvas(options.imageData.width, options.imageData.height);
-        this.context = this.canvas.getContext('2d');
+        this.data = utils.getPixelsFromImage(canvas, context, element);
+    }  else if (options.from) {
+        element = utils.getElement(options.from);
+        canvas = imageFilterCore.getCanvas(element.width, element.height);
+        context = canvas.getContext('2d');
 
+        this.data = utils.getPixelsFromImage(canvas, context, element);
+    } else {
         this.data = options.imageData;
-    } else if (options.from) {
-        element = getImageElement(options.from);
-        this.canvas = getCanvas(element.width, element.height);
-        this.context = this.canvas.getContext('2d');
-
-        this.data = utils.getPixelsFromImage(this.canvas, this.context, element);
     }
 
     if (!this.data) {
@@ -61,96 +52,152 @@ function ImageFilter(options) {
     }
 }
 
+/**
+ * Push contrast filter
+ * @method  contrast
+ * @param   {Object} options
+ * @returns {ImageFilter}
+ */
 ImageFilter.prototype.contrast = function (options) {
     this.filters.push({
         fn: imageFilterContrast,
-        options
+        options: options
     });
 
     return this;
 };
 
+/**
+ * Push grayscale filter
+ * @method  grayscale
+ * @param   {Object} options
+ * @returns {ImageFilter}
+ */
 ImageFilter.prototype.grayscale = function () {
-    this.filters.push({
-        fn: imageFilterGrayscale,
-        options: {}
-    });
-
+    this.filters.push({ fn: imageFilterGrayscale });
     return this;
 };
 
+/**
+ * Push brightness filter
+ * @method  brightness
+ * @param   {Object} options
+ * @returns {ImageFilter}
+ */
 ImageFilter.prototype.brightness = function (options) {
     this.filters.push({
         fn: imageFilterBrightness,
-        options
+        options: options
     });
 
     return this;
 };
 
+/**
+ * Push sepia filter
+ * @method  sepia
+ * @param   {Object} options
+ * @returns {ImageFilter}
+ */
 ImageFilter.prototype.sepia = function () {
-    this.filters.push({
-        fn: imageFilterSepia,
-        options: {}
-    });
+    this.filters.push({ fn: imageFilterSepia });
 
     return this;
 };
 
+/**
+ * Push threshold filter
+ * @method  threshold
+ * @param   {Object} options
+ * @returns {ImageFilter}
+ */
 ImageFilter.prototype.threshold = function (options) {
     this.filters.push({
         fn: imageFilterThreshold,
-        options
+        options: options
     });
 
     return this;
 };
 
+/**
+ * Push colorize filter
+ * @method  colorize
+ * @param   {Object} options
+ * @returns {ImageFilter}
+ */
 ImageFilter.prototype.colorize = function (options) {
     this.filters.push({
         fn: imageFilterColorize,
-        options
+        options: options
     });
 
     return this;
 };
 
-ImageFilter.prototype.append = function (selector) {
-    if (!selector) {
-        return;
-    }
+/**
+ * Iterates all filters and applies filters
+ * @method  apply
+ * @returns {Promise}
+ */
+ImageFilter.prototype.apply = function () {
+    var nWorkers = this.nWorkers;
+    return this.filters.reduce(function (promise, filter) {
+        return promise.then(function (data) {
+            var params = [data];
 
-    const target = document.querySelectorAll(selector)[0];
-
-    if (!target) {
-        throw new Error('image-filters:: no "to" element found');
-    }
-
-    // Iterate filters and execute them one by one
-    this.filters.reduce(
-        (promise, filter) => promise.then(
-            (data) => {
-                const options = filter.options;
-                options.data = data;
-
-                return filter.fn(options);
+            if (filter.options) {
+                params.push(filter.options);
             }
-        ),
-        Promise.resolve(this.data)
-    ).then((data) => {
+
+            params.push(nWorkers);
+
+            return filter.fn.apply(null, params);
+        }.bind(this));
+    }, Promise.resolve(this.data)).then(function (data) {
+        this.data = data;
+        return data;
+    });
+};
+
+/**
+ * Applies the filters and appends it to the given selector node
+ * @method  append
+ * @param   {String} selector
+ * @returns {Promise}
+ */
+ImageFilter.prototype.append = function (selector) {
+    const target = utils.getElement(selector);
+
+    return this.apply().then(function(data) {
         const image = document.createElement('img');
-        image.setAttribute('src', utils.convertToDataURL(this.canvas, this.context, data));
+        image.setAttribute('src', imageFilterCore.convertImageDataToCanvasURL(data));
         target.appendChild(image);
     });
 };
 
+/**
+ * Re-apply filters and updates targer
+ * @method  update
+ * @param   {String} selector
+ * @returns {Promise}
+ */
 ImageFilter.prototype.update = function (selector) {
-    const target = document.querySelectorAll(selector)[0];
-    target.setAttribute('src', utils.convertToDataURL(this.canvas, this.context, this.data));
+    const target = utils.getElement(selector);
+
+    return this.apply().then(function (data) {
+        target.setAttribute('src', imageFilterCore.convertImageDataToCanvasURL(data));
+    });
 };
 
+/**
+ * Returns the dataURL from the current data
+ * @method  getDataURL
+ * @returns {String}
+ */
 ImageFilter.prototype.getDataURL = function () {
-    return utils.convertToDataURL(this.canvas, this.context, this.data);
+    console.log(this.data);
+    return imageFilterCore.convertImageDataToCanvasURL(this.data);
 };
 
 module.exports = ImageFilter;
