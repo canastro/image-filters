@@ -29,7 +29,7 @@ npm install image-filters --save
 At the moment there are three ways of usage, img element, imageData or url:
 ### Initialization:
 ```js
-var imageFilter = require('image-filter');
+var imageFilter = require('image-filters');
 
 // from a image element
 var elementOne = new ImageFilter({ from: '#original' }, nWorkers);
