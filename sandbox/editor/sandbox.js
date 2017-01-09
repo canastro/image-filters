@@ -1,5 +1,5 @@
-var ImageFilter = require('../src/index');
-const effects = {};
+var ImageFilter = require('../../src/index');
+var effects = {};
 
 function clearContainer(selector) {
     var myNode = document.getElementById(selector);
@@ -57,7 +57,7 @@ window.apply = function () {
 
     clearContainer('results-container');
 
-    let imageFilter = new ImageFilter({
+    var imageFilter = new ImageFilter({
         url: 'dummy.jpg'
     });
 
