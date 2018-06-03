@@ -1,3 +1,5 @@
+# This is not actively maintained
+
 ![build status](https://travis-ci.org/canastro/image-filters.svg?branch=master)
 [![npm version](https://badge.fury.io/js/image-filters.svg)](https://badge.fury.io/js/image-filters)
 [![codecov](https://codecov.io/gh/canastro/image-filters/branch/master/graph/badge.svg)](https://codecov.io/gh/canastro/image-filters)
