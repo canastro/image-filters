@@ -3,6 +3,7 @@ const imageFilterBrightness = require('image-filter-brightness');
 const imageFilterGrayscale = require('image-filter-grayscale');
 const imageFilterThreshold = require('image-filter-threshold');
 const imageFilterSepia = require('image-filter-sepia');
+const imageFilterInvert = require('image-filter-invert');
 const imageFilterColorize = require('image-filter-colorize');
 const imageFilterCore = require('image-filter-core');
 const utils = require('./utils');
@@ -115,6 +116,20 @@ ImageFilter.prototype.threshold = function (options) {
     this.filters.push({
         fn: imageFilterThreshold,
         options: options
+    });
+
+    return this;
+};
+
+/**
+ * Push invert filter
+ * @method  invert
+ * @param   {Object} options
+ * @returns {ImageFilter}
+ */
+ImageFilter.prototype.invert = function () {
+    this.filters.push({
+        fn: imageFilterInvert
     });
 
     return this;

@@ -19,7 +19,7 @@ This library is wrapper around the following smaller libraries:
 * [image-filter-sepia](https://www.npmjs.com/package/image-filter-sepia)
 * [image-filter-threshold](https://www.npmjs.com/package/image-filter-threshold)
 
-So if you want to use only one or two of these filters you might be better of just including them directly.
+So if you want to use only one or two of these filters you might be better off just including them directly.
 
 ## Install
 
@@ -32,15 +32,17 @@ At the moment there are three ways of usage, img element, imageData or url:
 ### Initialization:
 ```js
 var imageFilter = require('image-filters');
+// OR >ES6
+import ImageFilter from "image-filters";
 
 // from a image element
-var elementOne = new ImageFilter({ from: '#original' }, nWorkers);
+var imageFilter = new ImageFilter({ from: '#original' }, nWorkers);
 
 // from image data
-var elementTwo = new ImageFilter({ imageData: imageData }, nWorkers);
+var imageFilter = new ImageFilter({ imageData: imageData }, nWorkers);
 
 // from url
-var elementThree = new ImageFilter({ url: "http://lorempixel.com/400/200" }, nWorkers);
+var imageFilter = new ImageFilter({ url: "http://lorempixel.com/400/200" }, nWorkers);
 ```
 
 ### Apply filters:
@@ -51,11 +53,37 @@ imageFilter
     .brightness({ adjustment: 50 });
 ```
 
+### Available filter functions
+```js
+// contrast, brightness and threshold accept values in the range 0-255
+.contrast({contrast: 50});
+.brightness({adjustment: 50});
+.threshold({ threshold: 30 });
+	
+// grayscale, sepia and invert do not accept value
+.grayscale();
+.sepia();
+.invert();
+
+// colorize accepts an obect parameter with a value color in HEX and a level value in the range 0-100
+.colorize({ color: '#008080', level: 50 });
+```
+
 ### Get results:
-Every transformation will return as imageData, but you have the possibility to get the result appended to the DOM.
+When you added the filters to the imageFilter object, you need to apply them. The apply function will return a Promise.
 
 ```js
-//append to html
+imageFilter.apply().then(function (imageData) {
+	console.log(imageData);
+	// To have DataURL
+	console.log(imageFilterCore.convertImageDataToCanvasURL(imageData));
+})
+```
+
+You also have the possibility to get the result appended to the DOM as an img element, without needing to call the apply function beforehand
+
+```js
+// append to html
 imageFilter.append('#target');
 ```
 
